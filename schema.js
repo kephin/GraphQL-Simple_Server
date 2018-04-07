@@ -34,6 +34,13 @@ const RootQuery = new GraphQLObjectType({
         return patient.data;
       },
     },
+    patients: {
+      type: new GraphQLList(PatientType),
+      async resolve(parentValue, args) {
+        const patients = await axios.get('http://localhost:3000/patients');
+        return patients.data;
+      },
+    },
   },
 });
 
