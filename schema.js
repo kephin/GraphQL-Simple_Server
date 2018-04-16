@@ -1,9 +1,9 @@
 const axios = require('axios');
 const {
   GraphQLObjectType,
+  GraphQLSchema,
   GraphQLString,
   GraphQLInt,
-  GraphQLSchema,
   GraphQLList,
   GraphQLNonNull,
 } = require('graphql');
@@ -31,14 +31,14 @@ const RootQuery = new GraphQLObjectType({
         id: { type: GraphQLString },
       },
       async resolve(parentValue, args) {
-        const patient = await axios.get(`http://localhost:3000/patients/${args.id}`);
+        const patient = await axios.get(`http://localhost:8080/patients/${args.id}`);
         return patient.data;
       },
     },
     patients: {
       type: new GraphQLList(PatientType),
       async resolve(parentValue, args) {
-        const patients = await axios.get('http://localhost:3000/patients');
+        const patients = await axios.get('http://localhost:8080/patients');
         return patients.data;
       },
     },
@@ -57,7 +57,7 @@ const mutation = new GraphQLObjectType({
         age: { type: new GraphQLNonNull(GraphQLInt) },
       },
       async resolve(parentValue, args){
-        const newPatient = await axios.post('http://localhost:3000/patients', { ...args });
+        const newPatient = await axios.post('http://localhost:8080/patients', { ...args });
         return newPatient.data;
       },
     },
@@ -67,7 +67,7 @@ const mutation = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) },
       },
       async resolve(parentValue, args){
-        const patient = await axios.delete(`http://localhost:3000/patients/${args.id}`);
+        const patient = await axios.delete(`http://localhost:8080/patients/${args.id}`);
         return patient.data;
       },
     },
@@ -80,7 +80,7 @@ const mutation = new GraphQLObjectType({
         age: { type: GraphQLInt },
       },
       async resolve(parentValue, args) {
-        const patient = await axios.patch(`http://localhost:3000/patients/${args.id}`, args);
+        const patient = await axios.patch(`http://localhost:8080/patients/${args.id}`, args);
         return patient.data;
       },
     }
